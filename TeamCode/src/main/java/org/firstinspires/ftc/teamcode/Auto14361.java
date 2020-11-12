@@ -86,14 +86,18 @@ public class Auto14361 extends LinearOpMode {
             double leftPower = 1.0;
             double rightPower = 1.0;
             // Send calculated power to wheels
-            frontLeftDrive.setPower(leftPower);
-            backLeftDrive.setPower(leftPower);
-            frontRightDrive.setPower(rightPower);
-            backRightDrive.setPower(rightPower);
+            setPower(leftPower, rightPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
+    }
+
+    public void setPower(double leftPower, double rightPower) {
+        frontLeftDrive.setPower(leftPower);
+        backLeftDrive.setPower(leftPower);
+        frontRightDrive.setPower(rightPower);
+        backRightDrive.setPower(rightPower);
     }
 }
