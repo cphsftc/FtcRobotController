@@ -48,13 +48,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="DriveForward", group="Linear Opmode")
-public class Auto extends LinearOpMode {
+@Autonomous(name="DriveForward Auto 14361", group="Linear Opmode")
+public class Auto14361 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor backLeftDrive = null;
+    private DcMotor frontLeftDrive = null;
+    private DcMotor backRightDrive = null;
+    private DcMotor frontRightDrive = null;
 
     @Override
     public void runOpMode() {
@@ -64,31 +66,34 @@ public class Auto extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        backLeftDrive  = hardwareMap.get(DcMotor.class, "back_left_drive");
+        frontLeftDrive  = hardwareMap.get(DcMotor.class, "front_left_drive");
+        frontRightDrive  = hardwareMap.get(DcMotor.class, "front_right_drive");
+        backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
-            // Setup a variable for each drive wheel to save power level for telemetry
-
+            double leftPower = 1.0;
+            double rightPower = 1.0;
             // Send calculated power to wheels
-            leftDrive.setPower(1.0);
-            rightDrive.setPower(1);
+            frontLeftDrive.setPower(leftPower);
+            backLeftDrive.setPower(leftPower);
+            frontRightDrive.setPower(rightPower);
+            backRightDrive.setPower(rightPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
-            sleep(3000);
         }
     }
 }
