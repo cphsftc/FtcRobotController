@@ -60,7 +60,7 @@ public class Auto14363 extends LinearOpMode {
     private DcMotor frontRightDrive = null;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -82,20 +82,74 @@ public class Auto14363 extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        double leftPower;
+        double rightPower;
 
-        while (opModeIsActive()) {
-            double leftPower = 1.0;
-            double rightPower = 1.0;
-            // Send calculated power to wheels
-            setPower(leftPower, rightPower);
+        /*frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftDrive.setTargetPosition(5000);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftDrive.setPower(.5);*/
+
+        drive(.5);
+        turnLeft(90);
+        drive(.5);
+
+
+        //turnLeft(180);
+        //turnRight(90);
+
+
+
+        //if (opModeIsActive()) {
+
+            /*if(this.getRuntime() < 3){
+                leftPower = 1.0;
+                rightPower = 1.0;
+            } else {
+                leftPower = 0;
+                rightPower = 0;
+            }*/
+
+            /*setPower(1, 1);
+            Thread.sleep(1000);
+            setPower(-1, -1);
+            Thread.sleep(1000);
+            setPower(0,0);
+            setPower(1, 1);
+            Thread.sleep(1000);
+            setPower(-1, -1);
+            Thread.sleep(1000);
+            setPower(0,0);*/
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
+            /*telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();*/
+        }
+    //}
+
+    public void turnLeft(int angle) throws InterruptedException {
+        setPower(-.8, .8);
+        Thread.sleep((long)(angle * .7222222)*10);
+        setPower(0,0);
+        Thread.sleep(200);  
+    }
+
+    public void turnRight(int angle) throws InterruptedException {
+        double startTime = this.getRuntime();
+        while(this.getRuntime() < startTime + (angle * .7222222)/100){
+            setPower(.8, -.8);
         }
     }
 
-    public void setPower(double leftPower, double rightPower) {
+    public void drive(double time) throws InterruptedException {
+        setPower(.8, .8);
+        Thread.sleep((long)(time*1000));
+        setPower(0,0);
+        Thread.sleep(200);
+    }
+
+
+    public void setPower(double leftPower, double rightPower) throws InterruptedException {
         frontLeftDrive.setPower(leftPower);
         backLeftDrive.setPower(leftPower);
         frontRightDrive.setPower(rightPower);
