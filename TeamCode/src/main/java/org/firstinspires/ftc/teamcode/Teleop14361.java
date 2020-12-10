@@ -57,6 +57,19 @@ public class Teleop14361 extends LinearOpMode {
     private DcMotor frontLeftDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor frontRightDrive = null;
+    private DcMotor scoop = null;
+
+    public float getScoopDir() {
+        if (gamepad1.dpad_down) {
+            return -1;
+        }
+        else if (gamepad1.dpad_up) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
 
     @Override
     public void runOpMode() {
@@ -70,6 +83,7 @@ public class Teleop14361 extends LinearOpMode {
         frontLeftDrive  = hardwareMap.get(DcMotor.class, "front_left_drive");
         frontRightDrive  = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
+        scoop = hardwareMap.get(DcMotor.class, "scoop");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -77,6 +91,7 @@ public class Teleop14361 extends LinearOpMode {
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        scoop.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -88,6 +103,7 @@ public class Teleop14361 extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
+            double scoopPower;
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
@@ -103,16 +119,18 @@ public class Teleop14361 extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             leftPower  = -gamepad1.left_stick_y ;
             rightPower = -gamepad1.right_stick_y ;
+            scoopPower = getScoopDir();
 
             // Send calculated power to wheels
             frontLeftDrive.setPower(leftPower);
             backLeftDrive.setPower(leftPower);
             frontRightDrive.setPower(rightPower);
             backRightDrive.setPower(rightPower);
+            scoop.setPower(scoopPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Motors", "left (%.2f), right (%.2f), scoop (%.2f)", leftPower, rightPower, scoopPower);
             telemetry.addData("Ticks", "left (%d), right (%d)", frontLeftDrive.getCurrentPosition(), frontRightDrive.getCurrentPosition());
             telemetry.update();
         }
