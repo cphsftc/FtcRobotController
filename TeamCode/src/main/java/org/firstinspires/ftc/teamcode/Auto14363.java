@@ -85,14 +85,32 @@ public class Auto14363 extends LinearOpMode {
         double leftPower;
         double rightPower;
 
-        /*frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("motor position: ", frontLeftDrive.getCurrentPosition());
+        telemetry.update();
         frontLeftDrive.setTargetPosition(5000);
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeftDrive.setPower(.5);*/
+        frontLeftDrive.setPower(.5);
+        telemetry.addData("motor position: ", frontLeftDrive.getCurrentPosition());
+        telemetry.update();
 
-        drive(.5);
+        while (opModeIsActive() && frontLeftDrive.isBusy())   //frontLeftDrive.getCurrentPosition() < frontLeftDrive.getTargetPosition())
+        {
+            telemetry.addData("encoder-fwd-left", frontLeftDrive.getCurrentPosition() + "  busy=" + frontLeftDrive.isBusy());
+            telemetry.update();
+            idle();
+        }
+
+        // set motor power to zero to turn off motors. The motors stop on their own but
+        // power is still applied so we turn off the power.
+
+        frontLeftDrive.setPower(0.0);
+
+
+
+        /*drive(.5);
         turnLeft(90);
-        drive(.5);
+        drive(.5);*/
 
 
         //turnLeft(180);
@@ -131,7 +149,7 @@ public class Auto14363 extends LinearOpMode {
         setPower(-.8, .8);
         Thread.sleep((long)(angle * .7222222)*10);
         setPower(0,0);
-        Thread.sleep(200);  
+        Thread.sleep(200);
     }
 
     public void turnRight(int angle) throws InterruptedException {
