@@ -34,7 +34,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -58,11 +60,13 @@ public class Auto14363 extends LinearOpMode {
     private DcMotor frontLeftDrive = null;
     private DcMotor backRightDrive = null;
     private DcMotor frontRightDrive = null;
+    private DistanceSensor yeetSensor;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        yeetSensor = hardwareMap.get(DistanceSensor.class, "sensor_range");
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -83,19 +87,125 @@ public class Auto14363 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
-            double leftPower = 1.0;
-            double rightPower = 1.0;
-            // Send calculated power to wheels
-            setPower(leftPower, rightPower);
+        drive(.5);
+
+        /*frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("motor position: ", frontLeftDrive.getCurrentPosition());
+        telemetry.update();
+        frontRightDrive.setTargetPosition(500);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftDrive.setTargetPosition(500);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftDrive.setPower(1);
+        frontRightDrive.setPower(1);
+        backLeftDrive.setPower(1);
+        backRightDrive.setPower(1);
+
+        while (opModeIsActive() && frontRightDrive.isBusy() && frontLeftDrive.isBusy())   //frontLeftDrive.getCurrentPosition() < frontLeftDrive.getTargetPosition())
+        {
+            telemetry.addData("encoder-fwd-left", frontLeftDrive.getCurrentPosition() + "  busy=" + frontLeftDrive.isBusy());
+            telemetry.update();
+            idle();
+        }
+
+        backRightDrive.setTargetPosition(500);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeftDrive.setTargetPosition(500);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeftDrive.setPower(.7);
+        frontRightDrive.setPower(.7);
+        backLeftDrive.setPower(.7);
+        backRightDrive.setPower(.7);
+
+        while (opModeIsActive() && (backRightDrive.isBusy() || backLeftDrive.isBusy()))   //frontLeftDrive.getCurrentPosition() < frontLeftDrive.getTargetPosition())
+        {
+            if(backLeftDrive.getCurrentPosition() >= 500){
+                backLeftDrive.setPower(0);
+            }
+
+            if(backRightDrive.getCurrentPosition() >= 500){
+                backRightDrive.setPower(0);
+            }
+
+            telemetry.addData("back left", backLeftDrive.getCurrentPosition() + "  busy=" + backLeftDrive.isBusy());
+            telemetry.addData("back right", backRightDrive.getCurrentPosition() + "  busy=" + backRightDrive.isBusy());
+            telemetry.update();
+
+            idle();
+        }
+        // set motor power to zero to turn off motors. The motors stop on their own but
+        // power is still applied so we turn off the power.
+
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);*/
+
+
+
+        /*drive(.5);
+        turnLeft(90);
+        drive(.5);*/
+
+
+        //turnLeft(180);
+        //turnRight(90);
+
+
+
+        //if (opModeIsActive()) {
+
+            /*if(this.getRuntime() < 3){
+                leftPower = 1.0;
+                rightPower = 1.0;
+            } else {
+                leftPower = 0;
+                rightPower = 0;
+            }*/
+
+            /*setPower(1, 1);
+            Thread.sleep(1000);
+            setPower(-1, -1);
+            Thread.sleep(1000);
+            setPower(0,0);
+            setPower(1, 1);
+            Thread.sleep(1000);
+            setPower(-1, -1);
+            Thread.sleep(1000);
+            setPower(0,0);*/
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
+            /*telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();*/
         }
+    //}
+
+    /*public void turnLeft(int angle) throws InterruptedException {
+        setPower(-.8, .8);
+        Thread.sleep((long)(angle * .7222222)*10);
+        setPower(0,0);
+        Thread.sleep(200);
     }
 
-    public void setPower(double leftPower, double rightPower) {
+    public void turnRight(int angle) throws InterruptedException {
+        double startTime = this.getRuntime();
+        while(this.getRuntime() < startTime + (angle * .7222222)/100){
+            setPower(.8, -.8);
+        }
+    }
+    */
+
+
+    public void drive(double time) throws InterruptedException {
+        setPower(.8, .8);
+        Thread.sleep((long)(time*1000));
+        setPower(0,0);
+        Thread.sleep(200);
+    }
+
+
+    public void setPower(double leftPower, double rightPower) throws InterruptedException {
         frontLeftDrive.setPower(leftPower);
         backLeftDrive.setPower(leftPower);
         frontRightDrive.setPower(rightPower);
