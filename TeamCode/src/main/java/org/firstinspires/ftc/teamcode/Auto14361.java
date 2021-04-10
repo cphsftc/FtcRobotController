@@ -81,6 +81,11 @@ public class Auto14361 extends LinearOpMode {
         while (runtime.seconds() < 3) {
 
         }
+
+        setPower(-1.0, -1.0);
+        while (runtime.seconds() < 3.3) {
+
+        }
         setPower(0.0, 0.0);
 
         while (opModeIsActive()) {
